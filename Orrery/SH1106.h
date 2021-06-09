@@ -2,8 +2,12 @@
 
 #include "main.h"
 #include <string.h>
+#include "6x13.h"
+
 //#define INVERT
 
+#define DISPLAY_W		128
+#define DISPLAY_H		64
 
 #define ADDRESS				(0b0111100<<1)
 #define CMD_DISPLAY_ON		0b10101110
@@ -15,14 +19,14 @@
 class SH1106
 {
 private:
-	uint8_t display_buffer[128 * 64 / 8];
+	uint8_t display_buffer[DISPLAY_W * DISPLAY_H / 8];
 	void write_cmd(uint8_t n)
 	{
 		HAL_StatusTypeDef  res;
 		uint8_t buffer[2];
 		buffer[0] = 0;	// C0=0,D/C=0
 		buffer[1] = n;
-		res = HAL_I2C_Master_Transmit(&hi2c1, ADDRESS, buffer, sizeof(buffer), 100);
+		res = HAL_I2C_Master_Transmit(&hi2c2, ADDRESS, buffer, sizeof(buffer), 100);
 	}
 	
 	void write_data(uint8_t n)
@@ -31,7 +35,7 @@ private:
 		uint8_t buffer[2];
 		buffer[0] = 0b01000000;	// C0=0,D/C=1
 		buffer[1] = n;
-		res = HAL_I2C_Master_Transmit(&hi2c1, ADDRESS, buffer, sizeof(buffer), 100);
+		res = HAL_I2C_Master_Transmit(&hi2c2, ADDRESS, buffer, sizeof(buffer), 100);
 	}
 	
 public:
@@ -85,14 +89,13 @@ public:
 		Clear();
 		Display(true);
 		HAL_Delay(100); // ms
-
-		for (int y = 0; y < 64; y++)
-			//for (int x = 0; x < 128; x++)
-			{
-				int x = y;
-				SetPixel(x, y, 1);
-			}
-		Refresh();
+		
+//		for(int  i = 0 ; i < 64 ; i++)
+//		{
+//			SetPixel(i, i, 1);
+//			SetPixel(2*i, i, 1);
+//		}
+//		Refresh();
 	}
 	
 	void Display(bool enable)
@@ -124,12 +127,12 @@ public:
 	
 	void Refresh()
 	{
-//#define DMA
+#define DMA
 #ifdef DMA
 		uint8_t * p = display_buffer;
-		for(uint8_t y = 0 ; y < 8 ; y++, p+=128) 
+		for(uint8_t y = 0 ; y < 8 ; y++, p+=DISPLAY_W) 
 		{
-			uint8_t page[2 + 2 + 2 + 2 * 128];
+			uint8_t page[2 + 2 + 2 + 2 * DISPLAY_W];
 			page[0] = 0b10000000;	// C0=1,D/C=0
 			page[1] = CMD_SET_PAGE_ADDR | (y & 0x0F);
 			page[2] = 0b10000000;	// C0=1,D/C=0
@@ -138,17 +141,17 @@ public:
 			page[5] = CMD_SET_COL_HI | ((2 >> 4) & 0x0F);
 
 			uint8_t *b = page + 6;
-			for (int i = 0; i < 128; i++)
+			for (int i = 0; i < DISPLAY_W; i++)
 			{
-				if ( i == 128-1)
+				if ( i == DISPLAY_W-1)
 					*b++ = 0b01000000;	// C0=0,D/C=1
 				else
 					*b++ = 0b11000000;	// C0=1,D/C=1
 				*b++ = p[i];
 			}
 			HAL_StatusTypeDef  res;
-			res = HAL_I2C_Master_Transmit_DMA(&hi2c1, ADDRESS, page, sizeof(page));
-			while (hi2c1.State != HAL_I2C_STATE_READY)
+			res = HAL_I2C_Master_Transmit_DMA(&hi2c2, ADDRESS, page, sizeof(page));
+			while (hi2c2.State != HAL_I2C_STATE_READY)
 				continue;
 		}
 #else		
@@ -166,14 +169,26 @@ public:
 	
 	void SetPixel(uint8_t x, uint8_t y, uint8_t c)
 	{
-		
-//		if (c == 0)
-//			display_buffer[x / 8 + y * (128 / 8)] &= ~(1 << (x % 8));
-//		else
-//			display_buffer[x / 8 + y * (128 / 8)] |= 1 << (x % 8);
 		if (c == 0)
-			display_buffer[y / 8 * 128 + x] &= ~(1 << (y % 8));
+			display_buffer[y / 8 * DISPLAY_W + x] &= ~(1 << (y % 8));
 		else
-			display_buffer[y / 8 * 128 + x] |= 1 << (y % 8);
+			display_buffer[y / 8 * DISPLAY_W + x] |= 1 << (y % 8);
+	}
+	
+	void Text(uint8_t x, uint8_t y, const char *str )
+	{
+		while (*str != 0 && x < DISPLAY_W)
+		{
+			const uint8_t *c = _6x13 + (*str - 32) * 13;
+			
+			for (int ix = 0; ix < 6; ix++)
+			{
+				uint8_t mask = 1 << (7-ix);	
+				for (int iy = 0; iy < 13; iy++)
+					SetPixel(x + ix, y + iy, c[iy] & mask);
+			}
+			str++;
+			x += 6;
+		}
 	}
 };
