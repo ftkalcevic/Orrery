@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMC2130_Lookup", "TMC2130_Lookup\TMC2130_Lookup.csproj", "{CC462860-C81C-4F58-8192-2002A2DF9369}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC462860-C81C-4F58-8192-2002A2DF9369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC462860-C81C-4F58-8192-2002A2DF9369}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC462860-C81C-4F58-8192-2002A2DF9369}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC462860-C81C-4F58-8192-2002A2DF9369}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2BC6919-CA1D-4F21-8B37-C66FB55D961B}
+	EndGlobalSection
+EndGlobal
