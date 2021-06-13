@@ -2,12 +2,12 @@
 <EmbeddedProfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ToolchainID>com.visualgdb.arm-eabi</ToolchainID>
   <ToolchainVersion>
-    <GCC>9.2.1</GCC>
-    <GDB>8.3.0</GDB>
-    <Revision>1</Revision>
+    <GCC>9.3.1</GCC>
+    <GDB>9.2.0</GDB>
+    <Revision>2</Revision>
   </ToolchainVersion>
   <BspID>com.sysprogs.arm.stm32</BspID>
-  <BspVersion>2019.06</BspVersion>
+  <BspVersion>2020.10</BspVersion>
   <McuID>STM32F103C8</McuID>
   <MCUDefinitionFile>STM32F1xxxx/DeviceDefinitions/stm32f103xb.xml</MCUDefinitionFile>
   <MCUProperties>
@@ -63,7 +63,7 @@
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.efp.profiling.nosampling</Key>
-        <Value>1</Value>
+        <Value>0</Value>
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.efp.profiling.debugger_check</Key>
@@ -75,7 +75,7 @@
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.efp.profiling.hold_interrupts</Key>
-        <Value>FAST_SEMIHOSTING_HOLD_INTERRUPTS=0</Value>
+        <Value />
       </KeyValue>
     </Entries>
   </FrameworkProperties>
@@ -88,11 +88,19 @@
     <AllDependencies>
       <ProjectDependency>
         <RelativePath>Orrery.gpdsc</RelativePath>
-        <Timestamp>132309587011505055</Timestamp>
+        <Timestamp>132677479646048692</Timestamp>
       </ProjectDependency>
     </AllDependencies>
     <RootDirectory>
       <Subdirectories>
+        <VirtualDirectorySnapshot>
+          <Name>CORE</Name>
+          <Files>
+            <VirtualFileSnapshot>
+              <RelativePath>Drivers\CMSIS\Include\core_cm3.h</RelativePath>
+            </VirtualFileSnapshot>
+          </Files>
+        </VirtualDirectorySnapshot>
         <VirtualDirectorySnapshot>
           <Name>Startup</Name>
           <Files>
@@ -134,72 +142,47 @@
               </Files>
             </VirtualDirectorySnapshot>
             <VirtualDirectorySnapshot>
-              <Name>RCC</Name>
+              <Name>ADC</Name>
               <Files>
                 <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h</RelativePath>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_adc.h</RelativePath>
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc_ex.h</RelativePath>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc.c</RelativePath>
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c</RelativePath>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_adc_ex.h</RelativePath>
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c</RelativePath>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>
             <VirtualDirectorySnapshot>
-              <Name>CRC</Name>
+              <Name>RTC</Name>
               <Files>
                 <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_crc.h</RelativePath>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rtc.h</RelativePath>
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_crc.c</RelativePath>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc.c</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rtc_ex.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc_ex.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>
             <VirtualDirectorySnapshot>
-              <Name>CORTEX</Name>
+              <Name>EXTI</Name>
               <Files>
                 <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_cortex.h</RelativePath>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_exti.h</RelativePath>
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.c</RelativePath>
-                </VirtualFileSnapshot>
-              </Files>
-            </VirtualDirectorySnapshot>
-            <VirtualDirectorySnapshot>
-              <Name>TIM</Name>
-              <Files>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim_ex.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</RelativePath>
-                </VirtualFileSnapshot>
-              </Files>
-            </VirtualDirectorySnapshot>
-            <VirtualDirectorySnapshot>
-              <Name>DMA</Name>
-              <Files>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_dma_ex.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_dma.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.c</RelativePath>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_exti.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>
@@ -211,17 +194,6 @@
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
                   <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c</RelativePath>
-                </VirtualFileSnapshot>
-              </Files>
-            </VirtualDirectorySnapshot>
-            <VirtualDirectorySnapshot>
-              <Name>I2C</Name>
-              <Files>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_i2c.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_i2c.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>
@@ -243,6 +215,17 @@
               </Files>
             </VirtualDirectorySnapshot>
             <VirtualDirectorySnapshot>
+              <Name>SPI</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_spi.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_spi.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
               <Name>GPIO</Name>
               <Files>
                 <VirtualFileSnapshot>
@@ -256,6 +239,87 @@
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
                   <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
+              <Name>RCC</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc_ex.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
+              <Name>CORTEX</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_cortex.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
+              <Name>CRC</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_crc.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_crc.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
+              <Name>DMA</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_dma_ex.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_dma.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
+              <Name>TIM</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_tim_ex.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
+              <Name>I2C</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_i2c.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_i2c.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>
@@ -286,13 +350,15 @@
     </RootDirectory>
     <Configurations>
       <ImportedConfiguration>
+        <IsStaticLibrary>false</IsStaticLibrary>
         <Settings>
           <IncludeDirectories>
-            <string>D:\Projects\Toys\Orrery\software\Orrery\Inc</string>
-            <string>D:\Projects\Toys\Orrery\software\Orrery\Drivers\CMSIS\Device\ST\STM32F1xx\Include</string>
-            <string>D:\Projects\Toys\Orrery\software\Orrery\Drivers\STM32F1xx_HAL_Driver\Inc</string>
-            <string>D:\Projects\Toys\Orrery\software\Orrery\Drivers\STM32F1xx_HAL_Driver\Inc\Legacy</string>
-            <string>D:\Projects\Toys\Orrery\software\Orrery\Drivers\STM32F1xx_HAL_Driver\Src</string>
+            <string>Inc</string>
+            <string>Drivers\CMSIS\Include</string>
+            <string>Drivers\CMSIS\Device\ST\STM32F1xx\Include</string>
+            <string>Drivers\STM32F1xx_HAL_Driver\Inc</string>
+            <string>Drivers\STM32F1xx_HAL_Driver\Src</string>
+            <string>Drivers\STM32F1xx_HAL_Driver\Inc\Legacy</string>
           </IncludeDirectories>
           <PreprocessorMacros>
             <string>$$com.sysprogs.bspoptions.primary_memory$$_layout</string>

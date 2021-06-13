@@ -53,6 +53,8 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#define countof(x)	(sizeof(x)/sizeof((x)[0]))
+	
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -104,6 +106,8 @@ void Error_Handler(void);
 #define ADC_JOY_GPIO_Port GPIOB
 #define GPIO_BOOT1_Pin GPIO_PIN_2
 #define GPIO_BOOT1_GPIO_Port GPIOB
+#define GPIO_SPI_NSS_Pin GPIO_PIN_12
+#define GPIO_SPI_NSS_GPIO_Port GPIOB
 #define GPIO_STEP4_Pin GPIO_PIN_14
 #define GPIO_STEP4_GPIO_Port GPIOB
 #define GPIO_RGB_LED_Pin GPIO_PIN_8
@@ -135,7 +139,9 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 extern CRC_HandleTypeDef hcrc;
 extern I2C_HandleTypeDef hi2c2;
-
+extern ADC_HandleTypeDef hadc1;
+extern SPI_HandleTypeDef hspi2;
+extern RTC_HandleTypeDef hrtc;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
