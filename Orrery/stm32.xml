@@ -47,7 +47,7 @@
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.efp.semihosting.blocking_mode</Key>
-        <Value>1</Value>
+        <Value>0</Value>
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.efp.profiling.semihosting_driver</Key>
@@ -88,7 +88,7 @@
     <AllDependencies>
       <ProjectDependency>
         <RelativePath>Orrery.gpdsc</RelativePath>
-        <Timestamp>132677479646048692</Timestamp>
+        <Timestamp>132691528125537328</Timestamp>
       </ProjectDependency>
     </AllDependencies>
     <RootDirectory>

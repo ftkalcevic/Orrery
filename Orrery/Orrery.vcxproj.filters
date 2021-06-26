@@ -118,17 +118,17 @@
     <Filter Include="Header files\STM32Cube HAL\SPI">
       <UniqueIdentifier>{71b5c24f-a544-4dab-994f-949356f32432}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\Device-specific files\Semihosting/Profiler">
-      <UniqueIdentifier>{6351ab3a-3435-4d1c-b0e2-e5f2530a957a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\Device-specific files\Semihosting/Profiler">
-      <UniqueIdentifier>{a2489051-b51f-4209-8fd4-4d550d25de3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\STM32Cube HAL\RTC">
       <UniqueIdentifier>{19f9522b-6d08-4fda-a07f-f90f7c7708b8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header files\STM32Cube HAL\RTC">
       <UniqueIdentifier>{45aee853-6d39-42ad-b01d-c9bf5ed496e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Device-specific files\Semihosting/Profiler">
+      <UniqueIdentifier>{a0821c26-db2a-477c-b101-3968c0d4a60e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Device-specific files\Semihosting/Profiler">
+      <UniqueIdentifier>{aed2c230-0bda-40e0-94ed-15dc4da2a47c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -143,12 +143,6 @@
     </ClCompile>
     <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.c">
       <Filter>Source files\STM32Cube HAL\COMMON</Filter>
-    </ClCompile>
-    <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c">
-      <Filter>Source files\STM32Cube HAL\RCC</Filter>
-    </ClCompile>
-    <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c">
-      <Filter>Source files\STM32Cube HAL\RCC</Filter>
     </ClCompile>
     <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_crc.c">
       <Filter>Source files\STM32Cube HAL\CRC</Filter>
@@ -206,12 +200,6 @@
     </ClInclude>
     <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_def.h">
       <Filter>Header files\STM32Cube HAL\COMMON</Filter>
-    </ClInclude>
-    <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h">
-      <Filter>Header files\STM32Cube HAL\RCC</Filter>
-    </ClInclude>
-    <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc_ex.h">
-      <Filter>Header files\STM32Cube HAL\RCC</Filter>
     </ClInclude>
     <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_crc.h">
       <Filter>Header files\STM32Cube HAL\CRC</Filter>
@@ -300,6 +288,12 @@
     <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_spi.h">
       <Filter>Header files\STM32Cube HAL\SPI</Filter>
     </ClInclude>
+    <ClCompile Include="AnalogKeys.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="TMC2130.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
     <ClCompile Include="$(EFP_BASE)\Profiler\FastSemihosting.cpp">
       <Filter>Source files\Device-specific files\Semihosting/Profiler</Filter>
     </ClCompile>
@@ -330,11 +324,20 @@
     <ClInclude Include="$(EFP_BASE)\Profiler\DebuggerChecker.h">
       <Filter>Header files\Device-specific files\Semihosting/Profiler</Filter>
     </ClInclude>
+    <ClCompile Include="RTC_time_t.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
     <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc.c">
       <Filter>Source files\STM32Cube HAL\RTC</Filter>
     </ClCompile>
     <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc_ex.c">
       <Filter>Source files\STM32Cube HAL\RTC</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c">
+      <Filter>Source files\STM32Cube HAL\RCC</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c">
+      <Filter>Source files\STM32Cube HAL\RCC</Filter>
     </ClCompile>
     <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rtc.h">
       <Filter>Header files\STM32Cube HAL\RTC</Filter>
@@ -342,12 +345,12 @@
     <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rtc_ex.h">
       <Filter>Header files\STM32Cube HAL\RTC</Filter>
     </ClInclude>
-    <ClCompile Include="AnalogKeys.cpp">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="TMC2130.cpp">
-      <Filter>Source files</Filter>
-    </ClCompile>
+    <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h">
+      <Filter>Header files\STM32Cube HAL\RCC</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc_ex.h">
+      <Filter>Header files\STM32Cube HAL\RCC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Orrery.h">
@@ -360,6 +363,9 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="TMC2130.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="TMC2130_bitfields.h">
       <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>

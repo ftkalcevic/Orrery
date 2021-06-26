@@ -1,4 +1,7 @@
 #include <math.h>
+#include <time.h>
+#include <stdio.h>
+#include "Planets.h"
 
 #define M_PI       3.14159265358979323846   // pi
 #define M_PI_2     1.57079632679489661923   // pi/2
@@ -523,6 +526,11 @@ static double Moon(double d, double &lonm, double &lons)
 //}
 
 // Compute JD - http://neoprogrammics.com/perpetual_calendar_algorithms/jd_number/
+
+// y - eg 2021
+// m - 1-12
+// d - 1-31
+// h:m:s
 static double ymdhms2jd(int y, int m, int d, int hh, int mm, int ss)
 {
     int CalMode = 1;
@@ -547,21 +555,31 @@ static double ymdhms2jd(int y, int m, int d, int hh, int mm, int ss)
     return JD;
 }
 
-int CalculatePlanets()
+int CalculatePlanets( struct tm *st, double *planet_positions, int planet_count )
 {
 	
-	double JD = ymdhms2jd(2020, 4, 9, 11, 10, 5);
-	
+	double JD = ymdhms2jd(st->tm_year+1900, st->tm_mon+1, st->tm_mday, st->tm_hour, st->tm_min, st->tm_sec );
+	printf("JD=%d.%02d ", (int)JD,(int)(JD*100-((int)JD)*100));
 	double d = (JD) - 2451543.5;
 	double t = (JD - 2451545.0) / 365250;
+	double Su,Mo;
 
-	double Me = rev(Degrees(Mercury(t)));
-	double Ve = rev(Degrees(Venus(t)));
-	double Ea = rev(Degrees(Earth(t)));
-	double Su;
-	double Mo = rev(Moon(d,Mo,Su));
-	double Ma = rev(Degrees(Mars(t)));
-	double Ju = rev(Degrees(Jupiter(t)));
+	switch (planet_count)
+	{
+		default:
+		case Planets::Jupiter:
+			planet_positions[Planets::Jupiter] = rev(Degrees(Jupiter(t)));
+		case Planets::Mars:
+			planet_positions[Planets::Mars] = rev(Degrees(Mars(t)));
+		case Planets::Moon:
+			planet_positions[Planets::Moon] = rev(Moon(d, Mo, Su));
+		case Planets::Earth:
+			planet_positions[Planets::Earth] = rev(Degrees(Earth(t)));
+		case Planets::Venus:
+			planet_positions[Planets::Venus] = rev(Degrees(Venus(t)));
+		case Planets::Mercury:
+			planet_positions[Planets::Mercury] = rev(Degrees(Mercury(t)));
+	}
 
 	return 0;
 }

@@ -6,8 +6,11 @@ const uint8_t TMC_WRITE = 0x80;
 enum EMicrosteps 
 {
 	FULLSTEP=8,
+	STEP1=8,
 	HALFSTEP=7,
+	STEP2=7,
 	QUARTERSTEP=6,
+	STEP4=6,
 	STEP8=5,
 	STEP16=4,
 	STEP32=3,
@@ -109,6 +112,12 @@ public:
 	void microsteps(EMicrosteps s)         // Set microsteps to 1/16th
 	{
 		CHOPCONF.mres = s & 0b1111;
+		write(CHOPCONF.address, CHOPCONF.sr);
+	}
+	
+	void intpol(bool b)         // 256 step interpolation
+	{
+		CHOPCONF.intpol = b;
 		write(CHOPCONF.address, CHOPCONF.sr);
 	}
 	

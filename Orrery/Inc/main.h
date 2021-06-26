@@ -141,7 +141,7 @@ extern CRC_HandleTypeDef hcrc;
 extern I2C_HandleTypeDef hi2c2;
 extern ADC_HandleTypeDef hadc1;
 extern SPI_HandleTypeDef hspi2;
-extern RTC_HandleTypeDef hrtc;
+extern TIM_HandleTypeDef htim2;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
