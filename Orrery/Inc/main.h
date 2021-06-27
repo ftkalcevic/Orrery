@@ -72,8 +72,6 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -142,6 +140,7 @@ extern I2C_HandleTypeDef hi2c2;
 extern ADC_HandleTypeDef hadc1;
 extern SPI_HandleTypeDef hspi2;
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

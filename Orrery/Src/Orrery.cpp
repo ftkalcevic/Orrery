@@ -1,6 +1,7 @@
 #include "Orrery.h"
 #include "SH1106.h"
 #include "Planets.h"
+#include "PlanetMotion.h"
 #include "AnalogKeys.h"
 #include <string>
 #include <time.h>
@@ -9,78 +10,18 @@
 
 #define RSENSE	1.2
 
-#define PLANET_COUNT	6
+#define PLANET_COUNT	7
 
-/*
-Stepper		20 steps
-Microsteps	8
-stepper gearbox ratio	99.3:1
-gearbox pinion	20
-drive			80
 
-earth-spin
-	bevel	15:30
-	elbow	15:15
-moon=rotation
-	bevel	20:40
-	elbow	22:22
-
-how does earth-rotation effect earth-spin and moon-rotation?
-	1 earth rotation is equivalent to -1 shaft rotation
-	
- */
-
-#define STEPPER_STEPS_PER_REV	20.0
-#define MICROSTEPS				8.0
-#define STEPPER_GEAR			10.0		// Guess to get 99.3 ratio
-#define STEPPER_GEARBOX_GEAR	993.0
-#define GEARBOX_GEAR			20.0
-#define SHAFT_GEAR				80.0
-
-#define SHAFT_SCALE				(STEPPER_STEPS_PER_REV * MICROSTEPS * STEPPER_GEARBOX_GEAR / STEPPER_GEAR * SHAFT_GEAR / GEARBOX_GEAR)
-
-class Planet
-{
-	double angle;
-	double scale;
-	int velocity;
-	
-public:
-	Planet(double Scale)
-	{
-		scale = Scale;
-		angle = 0;
-		velocity = 0;
-	}
-	
-	void SetPosition(double newAngle)
-	{
-		angle = newAngle;
-	}
-	void UpdatePosition(double newAngle)
-	{
-		double delta = newAngle - angle;
-		delta += (delta > 180) ? -360 : (delta < -180) ? 360 : 0;	// delta between -pi and pi
-		angle = newAngle;
-		
-		velocity = delta * scale;	// truncate to nearest int
-		velocity = delta * 100;
-	}
-	int Velocity()
-	{
-		return velocity;
-	}
-};
-
-static Planet planets[PLANET_COUNT] =
+static PlanetMotion planets[PLANET_COUNT] =
 { 
-	{ /* Mercury    */ SHAFT_SCALE },
-	{ /* Venus		*/ SHAFT_SCALE },
-	{ /* Earth		*/ SHAFT_SCALE },
-	{ /* Earth-Spin	*/ SHAFT_SCALE },
-	{ /* Moon		*/ SHAFT_SCALE },
-	{ /* Mars		*/ SHAFT_SCALE },
-	//{ /* Jupiter	*/ SHAFT_SCALE },
+	{ /* Mercury    */ SHAFT_SCALE,		GPIO_STEP4_GPIO_Port,  GPIO_STEP4_Pin, GPIO_DIR4_GPIO_Port,  GPIO_DIR4_Pin, EDir::Forward },
+	{ /* Venus		*/ SHAFT_SCALE,		GPIO_STEP3_GPIO_Port,  GPIO_STEP3_Pin, GPIO_DIR3_GPIO_Port,  GPIO_DIR3_Pin, EDir::Forward },
+	{ /* Earth		*/ SHAFT_SCALE,		GPIO_STEP2_GPIO_Port,  GPIO_STEP2_Pin, GPIO_DIR2_GPIO_Port,  GPIO_DIR2_Pin, EDir::Forward },
+	{ /* Earth-Spin	*/ SHAFT_SCALE/2, GPIO_STEP1_GPIO_Port,  GPIO_STEP1_Pin, GPIO_DIR1_GPIO_Port,  GPIO_DIR1_Pin, EDir::Forward },
+	{ /* Moon		*/ SHAFT_SCALE/2, GPIO_STEP0_GPIO_Port,  GPIO_STEP0_Pin, GPIO_DIR0_GPIO_Port,  GPIO_DIR0_Pin, EDir::Forward },
+	{ /* Mars		*/ SHAFT_SCALE,		GPIO_STEP9_GPIO_Port,  GPIO_STEP9_Pin, GPIO_DIR9_GPIO_Port,  GPIO_DIR9_Pin, EDir::Forward },
+	{ /* Jupiter	*/ SHAFT_SCALE,		GPIO_STEP8_GPIO_Port,  GPIO_STEP8_Pin, GPIO_DIR8_GPIO_Port,  GPIO_DIR8_Pin, EDir::Forward },
 	//{ /* Saturn		*/ SHAFT_SCALE },
 	//{ /* Uranus		*/ SHAFT_SCALE },
 	//{ /* Neptune	*/ SHAFT_SCALE },
@@ -89,6 +30,7 @@ static Planet planets[PLANET_COUNT] =
 SH1106 display;
 AnalogKeys keys(&hadc1);
 TMC2130 stepperDriver(&hspi2, RSENSE);
+static volatile bool stepperUpdate = false;
 
 #define DWT_TIMER
 #ifdef DWT_TIMER
@@ -125,31 +67,25 @@ void delay_ms(uint32_t ms)
 }
 #endif
 
+extern "C" void TIM3_IRQHandler()
+{
+	__HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE);
+	stepperUpdate = true;
+}
+
 extern "C" void TIM2_IRQHandler()
 {
 	static int n = 0;
 	__HAL_TIM_CLEAR_IT(&htim2, TIM_IT_UPDATE);
 	
-	// Earth rotation 1
-	// Moon around earth 28 days
-	// earth around sun 365
-	// venus around sun 225
-	// mercury around sun 88 days
-	//if ( n % 88 == 0 ) 
-	HAL_GPIO_WritePin(GPIO_STEP4_GPIO_Port,  GPIO_STEP4_Pin, GPIO_PIN_SET);			// Mercury
-	//if ( n % 225 == 0 ) 
-	HAL_GPIO_WritePin(GPIO_STEP3_GPIO_Port,  GPIO_STEP3_Pin, GPIO_PIN_SET);			// Venus
-	//if ( n % 365 == 0 )  
-	HAL_GPIO_WritePin(GPIO_STEP2_GPIO_Port,  GPIO_STEP2_Pin, GPIO_PIN_SET);		// Earth around Sun
-	HAL_GPIO_WritePin(GPIO_STEP1_GPIO_Port,  GPIO_STEP1_Pin, GPIO_PIN_SET);								// Earth axis 1:2 diff ratio
-	//if ( n % 28 == 0 ) 
-	if ( n % 2 == 0 )	HAL_GPIO_WritePin(GPIO_STEP0_GPIO_Port,  GPIO_STEP0_Pin, GPIO_PIN_SET);			// Moon around earth 1:2 diff ratio
-//HAL_Delay(1); // ms
-	HAL_GPIO_WritePin(GPIO_STEP4_GPIO_Port,  GPIO_STEP4_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIO_STEP3_GPIO_Port,  GPIO_STEP3_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIO_STEP2_GPIO_Port,  GPIO_STEP2_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIO_STEP1_GPIO_Port,  GPIO_STEP1_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIO_STEP0_GPIO_Port,  GPIO_STEP0_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIO_RGB_LED_GPIO_Port, GPIO_RGB_LED_Pin, GPIO_PIN_SET);
+	
+	for (int i = 0; i < PLANET_COUNT; i++)
+		planets[i].Step(n);
+	for (int i = 0; i < PLANET_COUNT; i++)
+		planets[i].Unstep();
+	HAL_GPIO_WritePin(GPIO_RGB_LED_GPIO_Port, GPIO_RGB_LED_Pin, GPIO_PIN_RESET);
+
 	n++;
 }
 
@@ -196,17 +132,13 @@ void Orrery::main()
 	
 	struct tm tm_time;
 	memset(&tm_time, 0, sizeof(tm_time));
-	time_t time_speed = 86400;		// how fast are we moving in time - 1 real time.  86400 is 1day in 1 second.
+	time_t time_speed = 86400/10;		// how fast are we moving in time - 1 real time.  86400 is 1day in 1 second.
 	time_t current_time = 0;
 	double planets_position[PLANET_COUNT];
 
-	HAL_GPIO_WritePin(GPIO_DIR0_GPIO_Port, GPIO_DIR0_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIO_DIR1_GPIO_Port,  GPIO_DIR1_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIO_DIR2_GPIO_Port,  GPIO_DIR2_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIO_DIR3_GPIO_Port,  GPIO_DIR3_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIO_DIR4_GPIO_Port,  GPIO_DIR4_Pin, GPIO_PIN_SET);
 	
 	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_TIM_Base_Start_IT(&htim3);
 		
 	bool bFirst = true;
 	uint16_t lastKeyPress = 0;
@@ -225,7 +157,7 @@ void Orrery::main()
 		}
 
 		
-		if(RTC_time_t::TimeUpdate)
+		if (RTC_time_t::TimeUpdate)
 		{
 			RTC_time_t::TimeUpdate = false;
 			
@@ -237,35 +169,44 @@ void Orrery::main()
 			snprintf(buf, sizeof(buf), "%02d:%02d:%02d", real_time_tm.tm_hour, real_time_tm.tm_min, real_time_tm.tm_sec);
 			display.Text(0, 10, buf);
 			display.Refresh();
-
+		}
+		
+		if (stepperUpdate)
+		{
+			stepperUpdate = false;
 			if (bFirst)
 			{
-				current_time = real_time;
+				current_time = RTC_time_t::GetTime();
+				gmtime_r(&current_time, &tm_time);
 
-				CalculatePlanets(&real_time_tm, planets_position, PLANET_COUNT);
-				for(int i = 0 ; i < PLANET_COUNT ; i++)
+				CalculatePlanets(&tm_time, planets_position, PLANET_COUNT);
+				for (int i = 0; i < PLANET_COUNT; i++)
 					planets[i].SetPosition(planets_position[i]);
-				
-				current_time += time_speed;
+
+				current_time += time_speed/STEPPER_UPDATES_PER_SECOND;
 				gmtime_r(&current_time, &tm_time);
 				CalculatePlanets(&tm_time, planets_position, PLANET_COUNT);
 			}
 			else
 			{
 				// Update motor speeds
-				printf("%08X %04d/%02d/%02d %02d:%02d:%02d ", *(((uint32_t*)&current_time)+0), tm_time.tm_year+1900, tm_time.tm_mon+1, tm_time.tm_mday, tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);
-				for(int i = 0 ; i < PLANET_COUNT ; i++)
-				{
+				for (int i = 0; i < PLANET_COUNT; i++)
 					planets[i].UpdatePosition(planets_position[i]);
-					printf("%3d.%02d:", (int)(planets_position[i]), (int)((planets_position[i]*100 - (int)(planets_position[i]*100))*100) );
-					printf("%d ", planets[i].Velocity());
+				
+				printf("%08X %04d/%02d/%02d %02d:%02d:%02d ", *(((uint32_t*)&current_time) + 0), tm_time.tm_year + 1900, tm_time.tm_mon + 1, tm_time.tm_mday, tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);
+				for (int i = 0; i < PLANET_COUNT; i++)
+				{
+					//planets[i].UpdatePosition(planets_position[i]);
+					printf("%3d.%02d:", (int)(planets_position[i]), (int)((planets_position[i] * 100 - (int)(planets_position[i] * 100)) * 100));
+					//printf("%d->%dd%d:", planets[i].position, planets[i].newPosition, planets[i].delta);
+					printf("%d ", planets[i].velocity);
 					//if (planets[i].Velocity() < 0)
 					//	break;
 				}
 				printf("\n");
 				
 				// Compute next
-				current_time += time_speed;
+				current_time += time_speed/STEPPER_UPDATES_PER_SECOND;
 				gmtime_r(&current_time, &tm_time);
 				CalculatePlanets(&tm_time, planets_position, PLANET_COUNT);
 			}

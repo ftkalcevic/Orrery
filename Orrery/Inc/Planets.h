@@ -5,6 +5,7 @@ namespace Planets
 		Mercury = 0,
 		Venus,
 		Earth,
+		EarthSpin,
 		Moon,
 		Mars,
 		Jupiter,

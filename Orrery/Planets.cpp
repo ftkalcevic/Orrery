@@ -563,6 +563,8 @@ int CalculatePlanets( struct tm *st, double *planet_positions, int planet_count 
 	double d = (JD) - 2451543.5;
 	double t = (JD - 2451545.0) / 365250;
 	double Su,Mo;
+	double time_of_day = (double)(st->tm_hour * 60.0 * 60.0 + st->tm_min * 60.0 + st->tm_sec)/(24.0*60.0*60.0);
+	//printf("time_of_day=%d.%02d ", (int)time_of_day,(int)(time_of_day*100-((int)time_of_day)*100));
 
 	switch (planet_count)
 	{
@@ -573,6 +575,8 @@ int CalculatePlanets( struct tm *st, double *planet_positions, int planet_count 
 			planet_positions[Planets::Mars] = rev(Degrees(Mars(t)));
 		case Planets::Moon:
 			planet_positions[Planets::Moon] = rev(Moon(d, Mo, Su));
+		case Planets::EarthSpin:
+			planet_positions[Planets::EarthSpin] = 360.0 * time_of_day;
 		case Planets::Earth:
 			planet_positions[Planets::Earth] = rev(Degrees(Earth(t)));
 		case Planets::Venus:

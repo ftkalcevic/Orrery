@@ -100,6 +100,7 @@
     <ClCompile Include="Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.c" />
     <ClCompile Include="TMC2130.cpp" />
     <ClInclude Include="AnalogKeys.h" />
+    <ClInclude Include="PlanetMotion.h" />
     <ClInclude Include="SH1106.h" />
     <ClInclude Include="TMC2130.h" />
     <ClInclude Include="TMC2130_bitfields.h" />

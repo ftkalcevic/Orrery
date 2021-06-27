@@ -368,5 +368,8 @@
     <ClInclude Include="TMC2130_bitfields.h">
       <Filter>Header files</Filter>
     </ClInclude>
+    <ClInclude Include="PlanetMotion.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

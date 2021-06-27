@@ -2,7 +2,6 @@
 
 #include "main.h"
 #include <time.h>
-#include "stm32f1xx_ll_rtc.h"
 
 #define BASE_TIME 1577797200	// 1/1/2020 0:0:0
 
