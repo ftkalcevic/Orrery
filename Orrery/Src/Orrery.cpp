@@ -114,25 +114,11 @@ void Orrery::main()
 	stepperDriver.intpol(true);				// interpolation
 	stepperDriver.en_pwm_mode(true);		// Toggle stealthChop on TMC2130/2160/5130/5160
 	stepperDriver.pwm_autoscale(true);		// Needed for stealthChop
-	
-//  Estimate calculation time	
-//	{
-//		uint32_t dwtStart = DWT->CYCCNT;
-//		for ( int i = 0; i < 100; i++ )
-//			CalculatePlanets();
-//		uint32_t dwtEnd = DWT->CYCCNT;
-//	
-//		uint32_t dwtTotal = (dwtEnd - dwtStart)/100/(SYSTEM_TICKS_1US);
-//		char buf[20];
-//		snprintf(buf, sizeof(buf), "%d", dwtTotal);                                                                                                                                                                                                                                                                                                         
-//		display.Text(0, 24, buf);
-//		display.Refresh();
-//	}
 
 	
 	struct tm tm_time;
 	memset(&tm_time, 0, sizeof(tm_time));
-	time_t time_speed = 86400/10;		// how fast are we moving in time - 1 real time.  86400 is 1day in 1 second.
+	time_t time_speed = 86400/SECONDS_PER_DAY;		// how fast are we moving in time - 1 real time.  86400 is 1day in 1 second.
 	time_t current_time = 0;
 	double planets_position[PLANET_COUNT];
 
@@ -193,17 +179,17 @@ void Orrery::main()
 				for (int i = 0; i < PLANET_COUNT; i++)
 					planets[i].UpdatePosition(planets_position[i]);
 				
-				printf("%08X %04d/%02d/%02d %02d:%02d:%02d ", *(((uint32_t*)&current_time) + 0), tm_time.tm_year + 1900, tm_time.tm_mon + 1, tm_time.tm_mday, tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);
-				for (int i = 0; i < PLANET_COUNT; i++)
-				{
-					//planets[i].UpdatePosition(planets_position[i]);
-					printf("%3d.%02d:", (int)(planets_position[i]), (int)((planets_position[i] * 100 - (int)(planets_position[i] * 100)) * 100));
-					//printf("%d->%dd%d:", planets[i].position, planets[i].newPosition, planets[i].delta);
-					printf("%d ", planets[i].velocity);
-					//if (planets[i].Velocity() < 0)
-					//	break;
-				}
-				printf("\n");
+//				printf("%08X %04d/%02d/%02d %02d:%02d:%02d ", *(((uint32_t*)&current_time) + 0), tm_time.tm_year + 1900, tm_time.tm_mon + 1, tm_time.tm_mday, tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);
+//				for (int i = 0; i < PLANET_COUNT; i++)
+//				{
+//					//planets[i].UpdatePosition(planets_position[i]);
+//					printf("%3d.%02d:", (int)(planets_position[i]), (int)((planets_position[i] * 100 - (int)(planets_position[i] * 100)) * 100));
+//					//printf("%d->%dd%d:", planets[i].position, planets[i].newPosition, planets[i].delta);
+//					printf("%d ", planets[i].velocity);
+//					//if (planets[i].Velocity() < 0)
+//					//	break;
+//				}
+//				printf("\n");
 				
 				// Compute next
 				current_time += time_speed/STEPPER_UPDATES_PER_SECOND;

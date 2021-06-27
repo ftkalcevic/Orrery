@@ -559,7 +559,7 @@ int CalculatePlanets( struct tm *st, double *planet_positions, int planet_count 
 {
 	
 	double JD = ymdhms2jd(st->tm_year+1900, st->tm_mon+1, st->tm_mday, st->tm_hour, st->tm_min, st->tm_sec );
-	printf("JD=%d.%02d ", (int)JD,(int)(JD*100-((int)JD)*100));
+	//printf("JD=%d.%02d ", (int)JD,(int)(JD*100-((int)JD)*100));
 	double d = (JD) - 2451543.5;
 	double t = (JD - 2451545.0) / 365250;
 	double Su,Mo;

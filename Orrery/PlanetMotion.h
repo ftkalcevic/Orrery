@@ -20,6 +20,8 @@ how does earth-rotation effect earth-spin and moon-rotation?
 	
  */
 
+
+
 #define STEPPER_STEPS_PER_REV	20.0
 #define MICROSTEPS				8.0
 #define STEPPER_GEAR			10.0		// Guess to get 99.3 ratio
@@ -29,6 +31,7 @@ how does earth-rotation effect earth-spin and moon-rotation?
 
 #define SHAFT_SCALE				(STEPPER_STEPS_PER_REV * MICROSTEPS * STEPPER_GEARBOX_GEAR / STEPPER_GEAR * SHAFT_GEAR / GEARBOX_GEAR)
 
+#define ACCELERATION			10
 
 namespace EDir
 {
@@ -45,6 +48,7 @@ public:
 	double angle;
 	int32_t stepsPerRev;
 	int velocity;
+	int new_velocity;
 	GPIO_TypeDef *port;
 	int pin;
 	int32_t position;
@@ -68,34 +72,18 @@ public:
 	{
 		angle = newAngle;
 		position = newAngle * (double)stepsPerRev / 360.0;
-		//position = position % stepsPerRev;
 		velocityCount = 0;
 	}
 	
 	void UpdatePosition(double newAngle)
 	{
 		int32_t newPosition = newAngle * (double)stepsPerRev / 360.0;
-		//newPosition = newPosition % stepsPerRev;
-		// todo - accelerate up to top speed.
-		// todo - keep track of the requested position and the current position and move based on that to prevent rounding errors accumulating.
-//		double delta = newAngle - angle;
-//		delta += (delta > 180) ? -360 : (delta < -180) ? 360 : 0;	// delta between -180 and 180
 		angle = newAngle;
 		
-//		velocity = delta * stepsPerRev;	// truncate to nearest int
-//		velocity = delta * 100;
-		
-		// stepsPerRev = 63,552
-		// T2_FREQ 4000Hz
-		// position -> newPosition in 4000 steps
-		// or move deltaPosition in 4000 steps
-		// move delta/4000 each step
-
 		int32_t delta = newPosition - position;
 		delta = delta % stepsPerRev;
 		delta += (delta > stepsPerRev/2) ? -stepsPerRev : (delta < -stepsPerRev/2) ? stepsPerRev : 0;	// delta between -stepsPerRev/2 and stepsPerRev/2
-		velocity = delta < 0 ? -delta : delta;	// velocity = steps per second
-		//velocity /= STEPPER_UPDATES_PER_SECOND;
+		new_velocity = delta < 0 ? -delta : delta;	// velocity = steps per second
 	}
 	int Velocity()
 	{
@@ -103,6 +91,13 @@ public:
 	}
 	bool Step( int nTick )
 	{
+		if (velocity != new_velocity)
+		{
+			if (velocity + ACCELERATION > new_velocity)
+				velocity  = new_velocity;
+			else
+				velocity += ACCELERATION;
+		}
 		velocityCount += velocity;
 		if (velocityCount > T2_FREQ)
 		{
